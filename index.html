@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Why Orbits Close — An Interactive Guide</title>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js" onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});"></script>
 <style>
 :root {
   --bg: #faf8f4;
@@ -277,7 +280,7 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
   <div class="kicker">Celestial Mechanics</div>
   <h1>Why Do Orbits Close?</h1>
   <p class="deck">A 150-year-old theorem reveals that only two force laws produce orbits that retrace themselves. Every gravitational system in the universe can be understood as a departure from these two perfect cases.</p>
-  <p class="byline">An interactive guide to Bertrand's theorem and the $\beta$ parameter</p>
+  <p class="byline">An interactive guide to Bertrand's theorem and the β parameter</p>
 </div>
 
 <article>
@@ -301,12 +304,12 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
 <div class="interactive-panel">
   <div class="panel-header"><span class="dot"></span> Orbital Rosettes and Breathing</div>
   <div class="panel-body">
-    <div style="display:flex;gap:20px;flex-wrap:wrap;">
-      <canvas id="orbitCanvas" width="440" height="440" style="flex:0 0 440px;max-width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
-      <canvas id="breathCanvas" width="280" height="440" style="flex:0 0 280px;max-width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
+    <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:12px;">
+      <canvas id="orbitCanvas" width="440" height="400" style="width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
+      <canvas id="breathCanvas" width="320" height="400" style="width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
     </div>
-    <div class="controls">
-      <label>β parameter
+    <div class="controls" style="margin-top:10px;">
+      <label>$\beta$ parameter
         <input type="range" id="betaSlider" min="0.3" max="2.5" step="0.01" value="1.0">
         <span class="val" id="betaVal">β = 1.00</span>
       </label>
@@ -314,14 +317,14 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
         <input type="range" id="eccSlider" min="0.05" max="0.7" step="0.01" value="0.3">
         <span class="val" id="eccVal">e = 0.30</span>
       </label>
-      <div style="display:flex;gap:6px;align-items:end;">
+      <div style="display:flex;gap:6px;align-items:end;flex-wrap:wrap;">
         <button id="btnKepler" class="active" onclick="setPreset(1.0,0.3)">Kepler β=1</button>
         <button id="btnOsc" onclick="setPreset(2.0,0.3)">Oscillator β=2</button>
-        <button id="btnLog" onclick="setPreset(1.414,0.3)">Log potential β=√2</button>
-        <button id="btnPrecess" onclick="setPreset(0.95,0.4)">Precessing β=0.95</button>
+        <button id="btnLog" onclick="setPreset(1.414,0.3)">Log β=√2</button>
+        <button id="btnPrecess" onclick="setPreset(0.95,0.4)">Precess β=0.95</button>
       </div>
     </div>
-    <p class="caption">Left: the orbital trace in position space. Right: the moment of inertia $I(θ)$ showing the breathing oscillation. For β = 1 (Kepler), the orbit closes after one revolution. For irrational β, it never closes.</p>
+    <p class="caption">Left: orbital trace in position space. Right: moment of inertia $I(\theta)$ showing the breathing oscillation. For $\beta = 1$ (Kepler), the orbit closes after one revolution. For irrational $\beta$, it never closes.</p>
   </div>
 </div>
 
@@ -336,14 +339,14 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
 
 <div class="equation-block">
   <div class="label">The Bertrand Cubic</div>
-  β²(1 − β²)(4 − β²) = 0
+  $$\beta^2(1 - \beta^2)(4 - \beta^2) = 0$$
 </div>
 
 <p>The three roots are $\beta^2 = 0$, $\beta^2 = 1$, and $\beta^2 = 4$. The first ($\beta = 0$) is marginal: it corresponds to $f \propto r^{-3}$, where the linear restoring force vanishes entirely. The other two are the physical solutions. For a power-law force $f \propto r^p$, the connection is:</p>
 
 <div class="equation-block">
   <div class="label">Force exponent to frequency ratio</div>
-  β² = p + 3
+  $$\beta^2 = p + 3$$
 </div>
 
 <p>So $p = -2$ (inverse-square) gives $\beta^2 = 1$; $p = +1$ (Hooke's law) gives $\beta^2 = 4$, hence $\beta = 2$. These are the only two. Every other power law either fails the nonlinear test or sits at the degenerate $\beta = 0$ boundary.</p>
@@ -357,7 +360,7 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
 
 <div class="equation-block">
   <div class="label">Kottler effective potential</div>
-  V<sub>eff</sub>(r) = −GMm/r + L²/(2mr²) − GML²/(c²mr³) − Λc²r²/6
+  $$V_{\text{eff}}(r) = -\frac{GMm}{r} + \frac{L^2}{2mr^2} - \frac{GML^2}{c^2 m r^3} - \frac{\Lambda c^2}{6}\,r^2$$
 </div>
 
 <p>Each term dominates at a different scale, and from this single expression we can compute $\beta^2(r)$ at every radius. The result has the shape of a <em class="term">mesa</em>: a flat-topped plateau near $\beta^2 = 1$ (the Kepler regime) bounded by two cliffs where $\beta^2$ drops through zero.</p>
@@ -406,7 +409,7 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
 
 <div class="equation-block">
   <div class="label">Logarithmic potential (flat rotation curves)</div>
-  β² = 2, &ensp; β = √2 ≈ 1.414
+  $$\beta^2 = 2, \qquad \beta = \sqrt{2} \approx 1.414$$
 </div>
 
 <p>So the flat-rotation regime does not sit at $\beta = 0$ (a common misconception corrected in this paper) but at $\beta = \sqrt{2}$: <em>between</em> the two Bertrand fixed points. Since $\sqrt{2}$ is irrational, orbits in the outer galaxy are bounded rosettes that never close. The mesa acquires a gentle upward slope — a ridge rising above the Kepler plateau — before the $\Lambda$-cliff eventually reasserts itself.</p>
@@ -441,7 +444,7 @@ em.term { font-style: normal; color: var(--accent); font-weight: 400; }
 
 <p class="lead" style="margin-top:40px;">Bertrand's theorem, viewed through the $\beta$ parameter, transforms a classical result about orbit closure into a diagnostic that spans all of gravitational physics. The mesa picture — a Kepler plateau bounded by relativistic and cosmological cliffs, with a galactic ridge in between — organises everything from Mercury's precession to the expansion of the universe into a single framework. Integrability, and its controlled failure, is the organising principle.</p>
 
-<p class="footnote">Based on "Multipole Potentials as Deformations of Bertrand Fixed Points" by Lee Sheridan (2025). Interactive visualisations computed from the analytic expressions in the paper; orbital integrations use a symplectic Störmer-Verlet scheme.</p>
+<p class="footnote">Based on "<a href="https://www.researchgate.net/publication/392025857" style="color:var(--accent);text-decoration:none;border-bottom:1px solid var(--accent);">Multipole Potentials as Deformations of Bertrand Fixed Points: Integrability as the Organising Principle</a>" by Lee McCulloch-James (2026). Interactive visualisations computed from the analytic expressions in the paper; orbital integrations use a generalised Binet model.</p>
 
 </article>
 
@@ -1067,6 +1070,13 @@ function drawVeff() {
   vCtx.fillText('V_eff', 0, 0);
   vCtx.restore();
 }
+
+document.getElementById('rSlider').addEventListener('input', drawVeff);
+drawVeff();
+</script>
+</body>
+</html>
+
 
 document.getElementById('rSlider').addEventListener('input', drawVeff);
 drawVeff();
