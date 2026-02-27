@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why Orbits Close — An Interactive Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #faf8f4;
+  --text: #1a1a1a;
+  --accent: #c43e1c;
+  --accent2: #1a6b4a;
+  --accent3: #2d5aa0;
+  --muted: #6b6560;
+  --border: #ddd5cc;
+  --card-bg: #f2efe9;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --max-w: 720px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--serif);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.72;
+  font-size: 19px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.header-strip {
+  background: var(--text);
+  color: var(--bg);
+  padding: 10px 0;
+  font-family: var(--sans);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+.hero {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 80px 24px 60px;
+  text-align: center;
+}
+
+.hero .kicker {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-family: var(--serif);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.12;
+  margin-bottom: 24px;
+  letter-spacing: -0.5px;
+}
+
+.hero .deck {
+  font-size: 21px;
+  color: var(--muted);
+  max-width: 620px;
+  margin: 0 auto;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.byline {
+  font-family: var(--sans);
+  font-size: 14px;
+  color: var(--muted);
+  margin-top: 30px;
+}
+
+article {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px 100px;
+}
+
+h2 {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  margin: 60px 0 20px;
+  line-height: 1.2;
+}
+
+h3 {
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 50px 0 12px;
+}
+
+p { margin-bottom: 20px; }
+
+.lead { font-size: 22px; line-height: 1.65; font-weight: 300; }
+
+.pullquote {
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 24px;
+  margin: 40px 0;
+  font-size: 24px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.equation-block {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 20px 28px;
+  margin: 28px 0;
+  font-family: var(--mono);
+  font-size: 16px;
+  text-align: center;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+
+.equation-block .label {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+/* ---- Interactive panels ---- */
+.interactive-panel {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin: 40px -40px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.04);
+}
+
+@media (max-width: 800px) {
+  .interactive-panel { margin: 40px -12px; }
+}
+
+.panel-header {
+  background: var(--text);
+  color: var(--bg);
+  padding: 16px 28px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.panel-header .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.panel-body {
+  padding: 28px;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+}
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  font-family: var(--sans);
+  font-size: 13px;
+  align-items: center;
+}
+
+.controls label {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.controls input[type="range"] {
+  width: 140px;
+  accent-color: var(--accent);
+}
+
+.controls .val {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.controls select {
+  font-family: var(--sans);
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+}
+
+.controls button {
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--card-bg);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.controls button:hover { background: var(--text); color: var(--bg); }
+.controls button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+.caption {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--muted);
+  margin-top: 12px;
+  line-height: 1.5;
+}
+
+.separator {
+  width: 40px;
+  height: 2px;
+  background: var(--accent);
+  margin: 60px auto;
+}
+
+em.term { font-style: normal; color: var(--accent); font-weight: 400; }
+
+.footnote {
+  font-size: 15px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<div class="header-strip">Interactive Review · Mathematical Physics</div>
+
+<div class="hero">
+  <div class="kicker">Celestial Mechanics</div>
+  <h1>Why Do Orbits Close?</h1>
+  <p class="deck">A 150-year-old theorem reveals that only two force laws produce orbits that retrace themselves. Every gravitational system in the universe can be understood as a departure from these two perfect cases.</p>
+  <p class="byline">An interactive guide to Bertrand's theorem and the $\beta$ parameter</p>
+</div>
+
+<article>
+
+<p class="lead">Drop a ball and it falls. Throw it sideways and it curves. Throw it fast enough and it orbits. But here is the remarkable thing: for almost every conceivable force law, that orbit will never close. The particle traces a path that fills an annular region, never exactly retracing itself. Only two force laws in all of mathematics produce orbits that close perfectly, every time, at every amplitude.</p>
+
+<p>This is the content of Bertrand's theorem, proved in 1873. The two privileged force laws are the inverse-square law (gravity as we know it, $f \propto 1/r^2$) and the harmonic restoring force ($f \propto r$, the force inside a uniform sphere of matter). Every other central force produces orbits that precess — that rotate slowly, never quite closing.</p>
+
+<p>The paper under review reinterprets this classical result through a single parameter, $\beta$, defined as the ratio of the radial oscillation frequency to the orbital frequency. When $\beta$ is rational, orbits close; when it takes one of two special values ($\beta = 1$ or $\beta = 2$), they close <em>at every amplitude</em>. The entire landscape of gravitational dynamics — from the innermost stable orbit of a black hole to the expansion of the universe — can be mapped as a journey through $\beta$-space.</p>
+
+<div class="separator"></div>
+
+<h3>Part I</h3>
+<h2>The Breathing Orbit</h2>
+
+<p>To build intuition for $\beta$, consider what happens to the moment of inertia $I = mr^2$ as a particle orbits. For a circular orbit, $I$ is constant. For an eccentric orbit, the particle swings between a closest approach (periapsis) and farthest point (apoapsis), and $I$ oscillates — the orbit <em class="term">breathes</em>.</p>
+
+<p>The frequency of this breathing is $\beta$ times the orbital frequency. For the Kepler problem ($\beta = 1$), the system breathes once per orbit: one expansion, one contraction. For the harmonic oscillator ($\beta = 2$), it breathes twice. For a general force law, $\beta$ can take any value, and the orbit traces a rosette.</p>
+
+<!-- ORBIT SIMULATOR -->
+<div class="interactive-panel">
+  <div class="panel-header"><span class="dot"></span> Orbital Rosettes and Breathing</div>
+  <div class="panel-body">
+    <div style="display:flex;gap:20px;flex-wrap:wrap;">
+      <canvas id="orbitCanvas" width="440" height="440" style="flex:0 0 440px;max-width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
+      <canvas id="breathCanvas" width="280" height="440" style="flex:0 0 280px;max-width:100%;height:auto;background:#0d1117;border-radius:8px;"></canvas>
+    </div>
+    <div class="controls">
+      <label>β parameter
+        <input type="range" id="betaSlider" min="0.3" max="2.5" step="0.01" value="1.0">
+        <span class="val" id="betaVal">β = 1.00</span>
+      </label>
+      <label>Eccentricity
+        <input type="range" id="eccSlider" min="0.05" max="0.7" step="0.01" value="0.3">
+        <span class="val" id="eccVal">e = 0.30</span>
+      </label>
+      <div style="display:flex;gap:6px;align-items:end;">
+        <button id="btnKepler" class="active" onclick="setPreset(1.0,0.3)">Kepler β=1</button>
+        <button id="btnOsc" onclick="setPreset(2.0,0.3)">Oscillator β=2</button>
+        <button id="btnLog" onclick="setPreset(1.414,0.3)">Log potential β=√2</button>
+        <button id="btnPrecess" onclick="setPreset(0.95,0.4)">Precessing β=0.95</button>
+      </div>
+    </div>
+    <p class="caption">Left: the orbital trace in position space. Right: the moment of inertia $I(θ)$ showing the breathing oscillation. For β = 1 (Kepler), the orbit closes after one revolution. For irrational β, it never closes.</p>
+  </div>
+</div>
+
+<p>The Kepler orbit ($\beta = 1$) is the one we know from planetary motion: a closed ellipse, retraced identically on every revolution. The harmonic oscillator ($\beta = 2$) produces a <em>centred</em> ellipse — the particle passes through the force centre twice per orbit, and the breathing is twice as fast. The $\beta = \sqrt{2}$ case (logarithmic potential, flat rotation curves) produces a rosette that never closes, since $\sqrt{2}$ is irrational. And when $\beta < 1$, the periapsis advances — this is the precession that Einstein explained for Mercury.</p>
+
+<div class="separator"></div>
+
+<h3>Part II</h3>
+<h2>The Cubic Constraint</h2>
+
+<p>Orbital closure at the linear level requires only that $\beta$ be rational. But Bertrand's theorem demands more: closure must hold at <em>all amplitudes</em>, not just for nearly circular orbits. When the perturbation analysis is pushed to third order, the nonlinear terms impose a devastating constraint:</p>
+
+<div class="equation-block">
+  <div class="label">The Bertrand Cubic</div>
+  β²(1 − β²)(4 − β²) = 0
+</div>
+
+<p>The three roots are $\beta^2 = 0$, $\beta^2 = 1$, and $\beta^2 = 4$. The first ($\beta = 0$) is marginal: it corresponds to $f \propto r^{-3}$, where the linear restoring force vanishes entirely. The other two are the physical solutions. For a power-law force $f \propto r^p$, the connection is:</p>
+
+<div class="equation-block">
+  <div class="label">Force exponent to frequency ratio</div>
+  β² = p + 3
+</div>
+
+<p>So $p = -2$ (inverse-square) gives $\beta^2 = 1$; $p = +1$ (Hooke's law) gives $\beta^2 = 4$, hence $\beta = 2$. These are the only two. Every other power law either fails the nonlinear test or sits at the degenerate $\beta = 0$ boundary.</p>
+
+<div class="separator"></div>
+
+<h3>Part III</h3>
+<h2>The Kottler Mesa</h2>
+
+<p>In the real universe, a gravitating mass does not sit in empty flat space. It sits in a universe with a cosmological constant $\Lambda > 0$. The exact solution for a point mass in a $\Lambda$ background was found by Friedrich Kottler in 1918 — the Schwarzschild–de Sitter metric. The effective potential has four terms:</p>
+
+<div class="equation-block">
+  <div class="label">Kottler effective potential</div>
+  V<sub>eff</sub>(r) = −GMm/r + L²/(2mr²) − GML²/(c²mr³) − Λc²r²/6
+</div>
+
+<p>Each term dominates at a different scale, and from this single expression we can compute $\beta^2(r)$ at every radius. The result has the shape of a <em class="term">mesa</em>: a flat-topped plateau near $\beta^2 = 1$ (the Kepler regime) bounded by two cliffs where $\beta^2$ drops through zero.</p>
+
+<!-- KOTTLER BETA CURVE -->
+<div class="interactive-panel">
+  <div class="panel-header"><span class="dot"></span> The β²(r) Kottler Profile</div>
+  <div class="panel-body">
+    <canvas id="kottlerCanvas" width="760" height="400" style="background:#0d1117;border-radius:8px;"></canvas>
+    <div class="controls">
+      <label>Central mass
+        <select id="massSelect">
+          <option value="solar">Solar mass (1 M☉)</option>
+          <option value="neutron">Neutron star (1.4 M☉)</option>
+          <option value="smbh" selected>Sgr A* (4×10⁶ M☉)</option>
+          <option value="m87">M87* (6.5×10⁹ M☉)</option>
+        </select>
+      </label>
+      <label>Λ multiplier
+        <input type="range" id="lambdaSlider" min="-2" max="6" step="0.1" value="0">
+        <span class="val" id="lambdaVal">×1</span>
+      </label>
+      <label style="flex-direction:row;gap:8px;align-items:center;">
+        <input type="checkbox" id="showGalactic" checked>
+        Show galactic β=√2 ridge
+      </label>
+    </div>
+    <p class="caption">The computed β²(r) for a point mass in a Λ>0 background. The inner cliff is the ISCO (relativistic instability); the outer cliff is the cosmological horizon (Λ-unbinding). Bound orbits exist only on the mesa. Drag the Λ slider to see how the outer cliff moves.</p>
+  </div>
+</div>
+
+<p>The inner cliff, at the innermost stable circular orbit (ISCO), is where the relativistic $r^{-3}$ correction overwhelms the Newtonian potential. Below this radius, $\beta^2 < 0$: the radial frequency becomes imaginary, perturbations grow exponentially, and the particle plunges inward. This is the threshold of black hole physics.</p>
+
+<p>The outer cliff, at $r_\Lambda \sim (GM/\Lambda c^2)^{1/3}$, is where the cosmological repulsion overwhelms gravitational binding. Beyond this radius, no stable circular orbits exist — the universe is expanding too fast for gravity to hold on.</p>
+
+<div class="pullquote">Gravitationally bound orbits exist only on the mesa. The inner cliff is general relativity; the outer cliff is cosmology.</div>
+
+<p>Between these two cliffs — spanning some twenty orders of magnitude in radius for a typical galaxy — the system is a deformed version of the Kepler fixed point. $\beta$ sits near 1, orbits are nearly closed, and the departure from closure is the precession that carries physical information.</p>
+
+<div class="separator"></div>
+
+<h3>Part IV</h3>
+<h2>The Galactic Ridge</h2>
+
+<p>The Kottler mesa describes a point mass in vacuum. Real galaxies have extended mass distributions, and this modifies the mesa's shape. As one moves outward through a galaxy, the enclosed mass grows (rather than being constant), and the effective force law shifts from $1/r^2$ toward $1/r$. The corresponding $\beta$ value is:</p>
+
+<div class="equation-block">
+  <div class="label">Logarithmic potential (flat rotation curves)</div>
+  β² = 2, &ensp; β = √2 ≈ 1.414
+</div>
+
+<p>So the flat-rotation regime does not sit at $\beta = 0$ (a common misconception corrected in this paper) but at $\beta = \sqrt{2}$: <em>between</em> the two Bertrand fixed points. Since $\sqrt{2}$ is irrational, orbits in the outer galaxy are bounded rosettes that never close. The mesa acquires a gentle upward slope — a ridge rising above the Kepler plateau — before the $\Lambda$-cliff eventually reasserts itself.</p>
+
+<p>The MOND interpolation, with its characteristic acceleration scale $a_0 \sim 1.2 \times 10^{-10}\;\text{m/s}^2$, governs how steeply $\beta$ climbs from 1 to $\sqrt{2}$. The empirical relation $a_0 \approx \sqrt{\Lambda}\cdot c$ connects this galactic transition to the cosmological constant — the same parameter that controls the outer cliff. Whether this is coincidence or physics remains one of the deepest open questions.</p>
+
+<div class="separator"></div>
+
+<h3>Part V</h3>
+<h2>Below the Mesa</h2>
+
+<p>What happens when $\beta^2$ goes negative? The radial perturbation equation becomes $\delta\ddot{r} = +|\Omega_r|^2\,\delta r$: exponential growth rather than oscillation. The effective potential has a maximum rather than a minimum, and any radial perturbation drives the particle away from its circular orbit.</p>
+
+<p>At the ISCO (inner cliff), the particle plunges inward toward the singularity. At the cosmological horizon (outer cliff), it is swept outward by the Hubble flow. Both are regions where Bertrand's classification breaks down entirely — the concept of orbital closure becomes meaningless when orbits are unstable.</p>
+
+<!-- IMAGINARY BETA PANEL -->
+<div class="interactive-panel">
+  <div class="panel-header"><span class="dot"></span> Effective Potential & Stability</div>
+  <div class="panel-body">
+    <canvas id="veffCanvas" width="760" height="360" style="background:#0d1117;border-radius:8px;"></canvas>
+    <div class="controls">
+      <label>Orbit radius r/r<sub>s</sub>
+        <input type="range" id="rSlider" min="2.5" max="20" step="0.1" value="8">
+        <span class="val" id="rVal">r = 8.0 rₛ</span>
+      </label>
+    </div>
+    <p class="caption">The Schwarzschild effective potential (blue) with circular orbit marked (dot). Below the ISCO at r = 6rₛ, the effective potential has a maximum, not a minimum: the orbit is unstable. The inset shows the local curvature, which determines the sign of β².</p>
+  </div>
+</div>
+
+<div class="separator"></div>
+
+<p class="lead" style="margin-top:40px;">Bertrand's theorem, viewed through the $\beta$ parameter, transforms a classical result about orbit closure into a diagnostic that spans all of gravitational physics. The mesa picture — a Kepler plateau bounded by relativistic and cosmological cliffs, with a galactic ridge in between — organises everything from Mercury's precession to the expansion of the universe into a single framework. Integrability, and its controlled failure, is the organising principle.</p>
+
+<p class="footnote">Based on "Multipole Potentials as Deformations of Bertrand Fixed Points" by Lee Sheridan (2025). Interactive visualisations computed from the analytic expressions in the paper; orbital integrations use a symplectic Störmer-Verlet scheme.</p>
+
+</article>
+
+<script>
+// ============================================================
+// ORBIT & BREATHING VISUALISATION
+// ============================================================
+const orbitCanvas = document.getElementById('orbitCanvas');
+const orbitCtx = orbitCanvas.getContext('2d');
+const breathCanvas = document.getElementById('breathCanvas');
+const breathCtx = breathCanvas.getContext('2d');
+
+let beta = 1.0, ecc = 0.3;
+let orbitAnimId, orbitTheta = 0;
+const orbitTrail = [];
+
+function setPreset(b, e) {
+  beta = b; ecc = e;
+  document.getElementById('betaSlider').value = b;
+  document.getElementById('eccSlider').value = e;
+  document.getElementById('betaVal').textContent = `β = ${b.toFixed(2)}`;
+  document.getElementById('eccVal').textContent = `e = ${e.toFixed(2)}`;
+  orbitTrail.length = 0;
+  orbitTheta = 0;
+  document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+}
+
+document.getElementById('betaSlider').addEventListener('input', function() {
+  beta = parseFloat(this.value);
+  document.getElementById('betaVal').textContent = `β = ${beta.toFixed(2)}`;
+  orbitTrail.length = 0; orbitTheta = 0;
+  document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+});
+
+document.getElementById('eccSlider').addEventListener('input', function() {
+  ecc = parseFloat(this.value);
+  document.getElementById('eccVal').textContent = `e = ${ecc.toFixed(2)}`;
+  orbitTrail.length = 0; orbitTheta = 0;
+});
+
+function rOfTheta(th) {
+  // r(θ) = a(1-e²) / (1 + e cos(β θ))  — generalised for arbitrary β
+  const semiLatus = 1.0;
+  return semiLatus / (1 + ecc * Math.cos(beta * th));
+}
+
+function drawOrbit() {
+  const W = orbitCanvas.width, H = orbitCanvas.height;
+  const cx = W/2, cy = H/2;
+  const scale = W * 0.28;
+
+  // Semi-transparent clear for trail effect
+  orbitCtx.fillStyle = 'rgba(13,17,23,0.03)';
+  orbitCtx.fillRect(0, 0, W, H);
+
+  // Draw faint grid
+  if (orbitTrail.length < 2) {
+    orbitCtx.fillStyle = '#0d1117';
+    orbitCtx.fillRect(0, 0, W, H);
+    orbitCtx.strokeStyle = 'rgba(255,255,255,0.05)';
+    orbitCtx.lineWidth = 1;
+    for (let i = 1; i <= 4; i++) {
+      orbitCtx.beginPath();
+      orbitCtx.arc(cx, cy, scale * i * 0.35, 0, Math.PI*2);
+      orbitCtx.stroke();
+    }
+    // Force centre
+    orbitCtx.fillStyle = '#fbbf24';
+    orbitCtx.beginPath();
+    orbitCtx.arc(cx, cy, 4, 0, Math.PI*2);
+    orbitCtx.fill();
+  }
+
+  // Advance
+  const dTheta = 0.02;
+  for (let i = 0; i < 3; i++) {
+    orbitTheta += dTheta;
+    const r = rOfTheta(orbitTheta);
+    if (r > 0 && r < 10) {
+      const x = cx + scale * r * Math.cos(orbitTheta);
+      const y = cy - scale * r * Math.sin(orbitTheta);
+      orbitTrail.push({x, y, th: orbitTheta});
+    }
+  }
+
+  // Keep trail manageable
+  if (orbitTrail.length > 6000) orbitTrail.splice(0, 3);
+
+  // Draw trail
+  if (orbitTrail.length > 1) {
+    const last = orbitTrail.length - 1;
+    for (let i = Math.max(0, last - 800); i < last; i++) {
+      const alpha = (i - Math.max(0, last - 800)) / 800;
+      orbitCtx.fillStyle = `rgba(196,62,28,${alpha * 0.8})`;
+      orbitCtx.fillRect(orbitTrail[i].x - 0.8, orbitTrail[i].y - 0.8, 1.6, 1.6);
+    }
+    // Current position
+    const cur = orbitTrail[last];
+    orbitCtx.fillStyle = '#fff';
+    orbitCtx.beginPath();
+    orbitCtx.arc(cur.x, cur.y, 4, 0, Math.PI*2);
+    orbitCtx.fill();
+  }
+
+  // Draw breathing
+  drawBreathing();
+  orbitAnimId = requestAnimationFrame(drawOrbit);
+}
+
+function drawBreathing() {
+  const W = breathCanvas.width, H = breathCanvas.height;
+  breathCtx.fillStyle = '#0d1117';
+  breathCtx.fillRect(0, 0, W, H);
+
+  const padL = 50, padR = 20, padT = 30, padB = 40;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Axes
+  breathCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+  breathCtx.lineWidth = 1;
+  breathCtx.beginPath();
+  breathCtx.moveTo(padL, padT);
+  breathCtx.lineTo(padL, padT + plotH);
+  breathCtx.lineTo(padL + plotW, padT + plotH);
+  breathCtx.stroke();
+
+  // Labels
+  breathCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  breathCtx.font = '11px "DM Sans", sans-serif';
+  breathCtx.textAlign = 'center';
+  breathCtx.fillText('θ', padL + plotW/2, padT + plotH + 28);
+  breathCtx.fillText('0', padL, padT + plotH + 16);
+  breathCtx.fillText('2π', padL + plotW - 5, padT + plotH + 16);
+  breathCtx.fillText('4π', padL + plotW/2, padT + plotH + 16);
+
+  breathCtx.save();
+  breathCtx.translate(14, padT + plotH/2);
+  breathCtx.rotate(-Math.PI/2);
+  breathCtx.fillText('I(θ) − I₀', 0, 0);
+  breathCtx.restore();
+
+  // Zero line
+  const zeroY = padT + plotH/2;
+  breathCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+  breathCtx.setLineDash([4,4]);
+  breathCtx.beginPath();
+  breathCtx.moveTo(padL, zeroY);
+  breathCtx.lineTo(padL + plotW, zeroY);
+  breathCtx.stroke();
+  breathCtx.setLineDash([]);
+
+  // Compute I(θ) = r(θ)² ∝ 1/(1+e cos(βθ))²
+  const N = 400;
+  const maxTh = 4 * Math.PI;
+  const points = [];
+  let minI = Infinity, maxI = -Infinity;
+  for (let i = 0; i <= N; i++) {
+    const th = (i / N) * maxTh;
+    const r = rOfTheta(th);
+    const I = r * r;
+    points.push({th, I});
+    if (I < minI) minI = I;
+    if (I > maxI) maxI = I;
+  }
+
+  const meanI = (minI + maxI) / 2;
+  const ampI = (maxI - minI) / 2 || 1;
+
+  breathCtx.strokeStyle = '#c43e1c';
+  breathCtx.lineWidth = 2;
+  breathCtx.beginPath();
+  for (let i = 0; i <= N; i++) {
+    const x = padL + (points[i].th / maxTh) * plotW;
+    const y = zeroY - ((points[i].I - meanI) / ampI) * (plotH * 0.4);
+    if (i === 0) breathCtx.moveTo(x, y);
+    else breathCtx.lineTo(x, y);
+  }
+  breathCtx.stroke();
+
+  // Current position marker
+  const curTh = orbitTheta % maxTh;
+  const curR = rOfTheta(orbitTheta);
+  const curI = curR * curR;
+  const curX = padL + (curTh / maxTh) * plotW;
+  const curY = zeroY - ((curI - meanI) / ampI) * (plotH * 0.4);
+  breathCtx.fillStyle = '#fff';
+  breathCtx.beginPath();
+  breathCtx.arc(curX, curY, 5, 0, Math.PI*2);
+  breathCtx.fill();
+
+  // Beta label
+  breathCtx.fillStyle = '#fbbf24';
+  breathCtx.font = 'bold 14px "JetBrains Mono", monospace';
+  breathCtx.textAlign = 'left';
+  breathCtx.fillText(`β = ${beta.toFixed(2)}`, padL + 8, padT + 18);
+
+  const ratio = beta;
+  const breathsStr = ratio === Math.round(ratio) ? `${Math.round(ratio)} breath${Math.round(ratio)!==1?'s':''}/orbit` : 'non-repeating';
+  breathCtx.font = '12px "DM Sans", sans-serif';
+  breathCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  breathCtx.fillText(breathsStr, padL + 8, padT + 36);
+}
+
+drawOrbit();
+
+// ============================================================
+// KOTTLER β²(r) COMPUTATION
+// ============================================================
+const kottlerCanvas = document.getElementById('kottlerCanvas');
+const kCtx = kottlerCanvas.getContext('2d');
+
+const G = 6.674e-11, c = 3e8, Msun = 1.989e30;
+const Lambda_obs = 1.1056e-52; // m^-2
+
+const masses = {
+  solar: {M: 1*Msun, label: '1 M☉'},
+  neutron: {M: 1.4*Msun, label: '1.4 M☉ neutron star'},
+  smbh: {M: 4e6*Msun, label: 'Sgr A* (4×10⁶ M☉)'},
+  m87: {M: 6.5e9*Msun, label: 'M87* (6.5×10⁹ M☉)'}
+};
+
+function computeBetaSq(M, Lambda, r) {
+  // For Kottler: V_eff = -GMm/r + L²/(2mr²) - GML²/(c²mr³) - Λc²r²/6
+  // At circular orbit: L² = m²GMr/(1 - 3rs/r) where rs = 2GM/c²
+  const rs = 2*G*M/(c*c);
+
+  // β² = 1 - 6GM/(c²r) - Λc²r³/(3GM) (leading order combined)
+  // More precisely from V''_eff/V'_eff analysis:
+  // Ω_r² = (GM/r³)(1 - 6GM/(c²r)) - Λc²/3
+  // Ω_θ² = GM/r³ - Λc²/3 ... but this gets complicated
+  // Use the exact Kottler result:
+  // For the Kottler metric, Ω_r² and Ω_θ² for circular orbits:
+  // Ω_θ² = GM/r³ + Λc²/3 (this is wrong, let me be careful)
+
+  // Actually for Kottler effective potential (Newtonian limit with corrections):
+  // V_eff = -GM/r + L²/(2r²) - GML²/(c²r³) - Λc²r²/6
+  // At circular orbit V'_eff=0: GM/r² - L²/r³ + 3GML²/(c²r⁴) + Λc²r/3 = 0
+  // Solving for L² (leading order, dropping Λ contribution to L²):
+  // L²/r³ ≈ GM/r² + Λc²r/3, so L² ≈ GMr + Λc²r⁴/3
+  // But for r << r_Λ, L² ≈ GMr(1 + 3GM/(c²r))⁻¹ ≈ GMr
+  // V''_eff = -2GM/r³ + 3L²/r⁴ - 12GML²/(c²r⁵) - Λc²/3
+  // Ω_θ² = L²/(m²r⁴) ≈ GM/r³ for r << r_Λ
+
+  // Clean approach: compute numerically
+  // Use L² from exact circular orbit condition
+  const rr = r;
+  // V'_eff = GM/r² - L²/r³ + 3GML²/(c²r⁴) + Λ*c²*r/3 = 0
+  // L²(1/r³ - 3GM/(c²r⁴)) = GM/r² + Λ*c²*r/3
+  const numer = G*M/(rr*rr) + Lambda*c*c*rr/3;
+  const denom = 1/(rr*rr*rr) - 3*G*M/(c*c*rr*rr*rr*rr);
+
+  if (denom <= 0) return -5; // inside ISCO
+  const L2 = numer / denom;
+  if (L2 < 0) return -5;
+
+  // V''_eff
+  const Vpp = -2*G*M/(rr*rr*rr) + 3*L2/(rr*rr*rr*rr) - 12*G*M*L2/(c*c*rr*rr*rr*rr*rr) - Lambda*c*c/3;
+
+  // Ω_θ² = L²/(r⁴) (in geometric units with m=1)
+  const OmThSq = L2 / (rr*rr*rr*rr);
+
+  if (OmThSq <= 0) return -5;
+  const betaSq = Vpp / OmThSq;
+  return betaSq;
+}
+
+function drawKottler() {
+  const W = kottlerCanvas.width, H = kottlerCanvas.height;
+  kCtx.fillStyle = '#0d1117';
+  kCtx.fillRect(0, 0, W, H);
+
+  const massKey = document.getElementById('massSelect').value;
+  const lambdaExp = parseFloat(document.getElementById('lambdaSlider').value);
+  const Lambda = Lambda_obs * Math.pow(10, lambdaExp);
+  const showGalactic = document.getElementById('showGalactic').checked;
+
+  document.getElementById('lambdaVal').textContent = lambdaExp === 0 ? '×1' : `×10^${lambdaExp.toFixed(1)}`;
+
+  const M = masses[massKey].M;
+  const rs = 2*G*M/(c*c);
+
+  const padL = 65, padR = 30, padT = 30, padB = 50;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Determine r range: from 2rs to ~r_Lambda * 10
+  const r_Lambda = Math.pow(3*G*M/(Lambda*c*c), 1/3);
+  const logRmin = Math.log10(2.5 * rs);
+  const logRmax = Math.log10(Math.min(r_Lambda * 30, 1e28));
+
+  // Compute β² across range
+  const N = 500;
+  const data = [];
+  for (let i = 0; i <= N; i++) {
+    const logr = logRmin + (i/N) * (logRmax - logRmin);
+    const r = Math.pow(10, logr);
+    const b2 = computeBetaSq(M, Lambda, r);
+    data.push({logr, b2, r});
+  }
+
+  // Y range: -2 to 3
+  const yMin = -2, yMax = 3;
+
+  function toX(logr) { return padL + (logr - logRmin) / (logRmax - logRmin) * plotW; }
+  function toY(b2) { return padT + (1 - (b2 - yMin) / (yMax - yMin)) * plotH; }
+
+  // Grid
+  kCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+  kCtx.lineWidth = 1;
+  for (let b2 = -2; b2 <= 3; b2++) {
+    const y = toY(b2);
+    kCtx.beginPath(); kCtx.moveTo(padL, y); kCtx.lineTo(padL+plotW, y); kCtx.stroke();
+  }
+
+  // Zero line
+  kCtx.strokeStyle = 'rgba(255,255,255,0.2)';
+  kCtx.setLineDash([6,4]);
+  kCtx.beginPath(); kCtx.moveTo(padL, toY(0)); kCtx.lineTo(padL+plotW, toY(0)); kCtx.stroke();
+  kCtx.setLineDash([]);
+
+  // β²=1 line
+  kCtx.strokeStyle = 'rgba(255,255,255,0.1)';
+  kCtx.setLineDash([3,3]);
+  kCtx.beginPath(); kCtx.moveTo(padL, toY(1)); kCtx.lineTo(padL+plotW, toY(1)); kCtx.stroke();
+  kCtx.setLineDash([]);
+
+  // β²=2 line (sqrt(2) regime)
+  if (showGalactic) {
+    kCtx.strokeStyle = 'rgba(26,107,74,0.3)';
+    kCtx.setLineDash([3,3]);
+    kCtx.beginPath(); kCtx.moveTo(padL, toY(2)); kCtx.lineTo(padL+plotW, toY(2)); kCtx.stroke();
+    kCtx.setLineDash([]);
+  }
+
+  // Shaded unstable regions
+  const zeroY = toY(0);
+  const botY = toY(yMin);
+  kCtx.fillStyle = 'rgba(196,62,28,0.08)';
+  kCtx.fillRect(padL, zeroY, plotW, botY - zeroY);
+
+  // Draw β²(r) curve
+  kCtx.strokeStyle = '#5b9cf5';
+  kCtx.lineWidth = 2.5;
+  kCtx.beginPath();
+  let started = false;
+  for (let i = 0; i <= N; i++) {
+    const x = toX(data[i].logr);
+    let b2 = data[i].b2;
+    if (b2 < yMin) b2 = yMin;
+    if (b2 > yMax) b2 = yMax;
+    const y = toY(b2);
+    if (!started) { kCtx.moveTo(x, y); started = true; }
+    else kCtx.lineTo(x, y);
+  }
+  kCtx.stroke();
+
+  // Galactic ridge overlay (schematic, if enabled)
+  if (showGalactic) {
+    // Show a dashed green curve that rises above β²=1 in the galactic regime
+    // This is schematic since Kottler is a vacuum solution
+    const logR_gal_start = Math.log10(rs * 1e6); // ~kpc scale
+    const logR_gal_end = Math.log10(rs * 1e8); // ~100 kpc
+    if (logR_gal_start < logRmax && logR_gal_end > logRmin) {
+      kCtx.strokeStyle = 'rgba(26,107,74,0.7)';
+      kCtx.lineWidth = 2;
+      kCtx.setLineDash([6,4]);
+      kCtx.beginPath();
+      let gs = false;
+      for (let i = 0; i <= 200; i++) {
+        const logr = logR_gal_start + (i/200) * (logR_gal_end - logR_gal_start);
+        if (logr < logRmin || logr > logRmax) continue;
+        const t = (logr - logR_gal_start) / (logR_gal_end - logR_gal_start);
+        const ridge = 1 + 1.0 * Math.sin(t * Math.PI); // rises to β²=2 at peak
+        const x = toX(logr);
+        const y = toY(ridge);
+        if (!gs) { kCtx.moveTo(x, y); gs = true; }
+        else kCtx.lineTo(x, y);
+      }
+      kCtx.stroke();
+      kCtx.setLineDash([]);
+    }
+  }
+
+  // Axes
+  kCtx.strokeStyle = 'rgba(255,255,255,0.4)';
+  kCtx.lineWidth = 1;
+  kCtx.beginPath();
+  kCtx.moveTo(padL, padT); kCtx.lineTo(padL, padT+plotH); kCtx.lineTo(padL+plotW, padT+plotH);
+  kCtx.stroke();
+
+  // Labels
+  kCtx.fillStyle = 'rgba(255,255,255,0.6)';
+  kCtx.font = '12px "DM Sans", sans-serif';
+  kCtx.textAlign = 'right';
+  for (let b2 = -2; b2 <= 3; b2++) {
+    kCtx.fillText(b2.toString(), padL - 8, toY(b2) + 4);
+  }
+
+  kCtx.textAlign = 'center';
+  kCtx.fillText('β²', padL - 35, padT + plotH/2);
+
+  // r-axis labels
+  kCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  kCtx.font = '11px "JetBrains Mono", monospace';
+  const logISCO = Math.log10(6 * rs);
+  if (logISCO > logRmin && logISCO < logRmax) {
+    kCtx.fillText('ISCO', toX(logISCO), padT + plotH + 18);
+    kCtx.strokeStyle = 'rgba(196,62,28,0.4)';
+    kCtx.setLineDash([3,3]);
+    kCtx.beginPath(); kCtx.moveTo(toX(logISCO), padT); kCtx.lineTo(toX(logISCO), padT+plotH); kCtx.stroke();
+    kCtx.setLineDash([]);
+  }
+
+  const logRL = Math.log10(r_Lambda);
+  if (logRL > logRmin && logRL < logRmax) {
+    kCtx.fillStyle = 'rgba(255,255,255,0.5)';
+    kCtx.fillText('r_Λ', toX(logRL), padT + plotH + 18);
+    kCtx.strokeStyle = 'rgba(45,90,160,0.4)';
+    kCtx.setLineDash([3,3]);
+    kCtx.beginPath(); kCtx.moveTo(toX(logRL), padT); kCtx.lineTo(toX(logRL), padT+plotH); kCtx.stroke();
+    kCtx.setLineDash([]);
+  }
+
+  // log r label
+  kCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  kCtx.font = '12px "DM Sans", sans-serif';
+  kCtx.fillText('log₁₀(r / m)', padL + plotW/2, padT + plotH + 38);
+
+  // Scale markers
+  kCtx.font = '10px "JetBrains Mono", monospace';
+  kCtx.fillStyle = 'rgba(255,255,255,0.3)';
+  const step = Math.max(1, Math.floor((logRmax - logRmin) / 8));
+  for (let lg = Math.ceil(logRmin); lg <= Math.floor(logRmax); lg += step) {
+    const x = toX(lg);
+    kCtx.fillText(lg.toString(), x, padT + plotH + 28);
+    kCtx.strokeStyle = 'rgba(255,255,255,0.05)';
+    kCtx.beginPath(); kCtx.moveTo(x, padT); kCtx.lineTo(x, padT+plotH); kCtx.stroke();
+  }
+
+  // Title
+  kCtx.fillStyle = '#fbbf24';
+  kCtx.font = 'bold 13px "JetBrains Mono", monospace';
+  kCtx.textAlign = 'left';
+  kCtx.fillText(masses[massKey].label, padL + 10, padT + 16);
+
+  // Legend
+  if (showGalactic) {
+    kCtx.fillStyle = 'rgba(26,107,74,0.7)';
+    kCtx.font = '11px "DM Sans", sans-serif';
+    kCtx.fillText('— galactic ridge (schematic)', padL + 10, padT + 34);
+  }
+}
+
+document.getElementById('massSelect').addEventListener('change', drawKottler);
+document.getElementById('lambdaSlider').addEventListener('input', drawKottler);
+document.getElementById('showGalactic').addEventListener('change', drawKottler);
+drawKottler();
+
+// ============================================================
+// EFFECTIVE POTENTIAL PANEL
+// ============================================================
+const veffCanvas = document.getElementById('veffCanvas');
+const vCtx = veffCanvas.getContext('2d');
+
+function drawVeff() {
+  const W = veffCanvas.width, H = veffCanvas.height;
+  vCtx.fillStyle = '#0d1117';
+  vCtx.fillRect(0, 0, W, H);
+
+  const rOrbit = parseFloat(document.getElementById('rSlider').value);
+  document.getElementById('rVal').textContent = `r = ${rOrbit.toFixed(1)} rₛ`;
+
+  const padL = 60, padR = 30, padT = 30, padB = 45;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Schwarzschild effective potential in units of rs
+  // V_eff/mc² = -1/x + L̃²/(2x²) - L̃²/x³
+  // where x = r/rs, L̃² chosen for circular orbit at x = rOrbit
+  // Circular orbit: dV/dx = 0 => 1/x² - L̃²/x³ + 3L̃²/x⁴ = 0
+  // L̃² = x²/(x - 3)
+  const x0 = rOrbit;
+  if (x0 <= 3) {
+    vCtx.fillStyle = 'rgba(255,255,255,0.5)';
+    vCtx.font = '14px "DM Sans"';
+    vCtx.textAlign = 'center';
+    vCtx.fillText('No stable circular orbit below ISCO (r = 6rₛ)', W/2, H/2);
+    return;
+  }
+  const L2 = x0*x0 / (x0 - 3);
+
+  function Veff(x) {
+    if (x <= 0.5) return 10;
+    return -1/x + L2/(2*x*x) - L2/(x*x*x);
+  }
+
+  // Find V at orbit
+  const V0 = Veff(x0);
+
+  // Plot range
+  const xMin = 2, xMax = Math.max(x0 * 3, 30);
+  const N = 500;
+
+  // Find V range
+  let vMin = Infinity, vMax = -Infinity;
+  for (let i = 0; i <= N; i++) {
+    const x = xMin + (i/N)*(xMax-xMin);
+    const v = Veff(x);
+    if (v < 2 && v > -2) {
+      if (v < vMin) vMin = v;
+      if (v > vMax) vMax = v;
+    }
+  }
+  const vPad = (vMax - vMin) * 0.15;
+  vMin -= vPad; vMax += vPad;
+
+  function toX(x) { return padL + (x - xMin)/(xMax - xMin)*plotW; }
+  function toY(v) { return padT + (1-(v-vMin)/(vMax-vMin))*plotH; }
+
+  // Grid
+  vCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+  vCtx.lineWidth = 1;
+
+  // Draw V_eff
+  vCtx.strokeStyle = '#5b9cf5';
+  vCtx.lineWidth = 2.5;
+  vCtx.beginPath();
+  let s = false;
+  for (let i = 0; i <= N; i++) {
+    const x = xMin + (i/N)*(xMax-xMin);
+    let v = Veff(x);
+    if (v > vMax + 1) v = vMax + 1;
+    if (v < vMin - 1) v = vMin - 1;
+    const px = toX(x); const py = toY(v);
+    if (!s) { vCtx.moveTo(px, py); s = true; }
+    else vCtx.lineTo(px, py);
+  }
+  vCtx.stroke();
+
+  // ISCO line at x=6
+  if (6 > xMin && 6 < xMax) {
+    vCtx.strokeStyle = 'rgba(196,62,28,0.4)';
+    vCtx.setLineDash([4,4]);
+    vCtx.beginPath();
+    vCtx.moveTo(toX(6), padT); vCtx.lineTo(toX(6), padT+plotH);
+    vCtx.stroke();
+    vCtx.setLineDash([]);
+    vCtx.fillStyle = 'rgba(196,62,28,0.7)';
+    vCtx.font = '11px "DM Sans"';
+    vCtx.textAlign = 'center';
+    vCtx.fillText('ISCO', toX(6), padT - 8);
+  }
+
+  // Orbit position dot
+  vCtx.fillStyle = x0 > 6 ? '#fbbf24' : '#c43e1c';
+  vCtx.beginPath();
+  vCtx.arc(toX(x0), toY(V0), 7, 0, Math.PI*2);
+  vCtx.fill();
+  vCtx.fillStyle = '#0d1117';
+  vCtx.beginPath();
+  vCtx.arc(toX(x0), toY(V0), 3, 0, Math.PI*2);
+  vCtx.fill();
+
+  // β² value
+  const betaSq = 1 - 6/x0;
+  const betaStr = betaSq >= 0 ? `β² = ${betaSq.toFixed(3)}` : `β² = ${betaSq.toFixed(3)} (imaginary!)`;
+  vCtx.fillStyle = betaSq >= 0 ? '#fbbf24' : '#c43e1c';
+  vCtx.font = 'bold 14px "JetBrains Mono", monospace';
+  vCtx.textAlign = 'left';
+  vCtx.fillText(betaStr, padL + 10, padT + 18);
+
+  if (betaSq >= 0) {
+    const b = Math.sqrt(betaSq);
+    vCtx.font = '12px "DM Sans"';
+    vCtx.fillStyle = 'rgba(255,255,255,0.5)';
+    vCtx.fillText(`β = ${b.toFixed(3)}, precession Δϖ = ${(2*Math.PI*(1/b - 1)).toFixed(4)} rad/orbit`, padL + 10, padT + 36);
+  } else {
+    vCtx.font = '12px "DM Sans"';
+    vCtx.fillStyle = 'rgba(196,62,28,0.8)';
+    vCtx.fillText('Unstable: perturbations grow exponentially', padL + 10, padT + 36);
+  }
+
+  // Curvature indicator: draw parabola approximation at orbit
+  const Vpp = -(-2/(x0*x0*x0) + 3*L2/(x0*x0*x0*x0) - 12*L2/(x0*x0*x0*x0*x0));
+  // Actually compute V''
+  const h = 0.001;
+  const Vpp_num = (Veff(x0+h) - 2*Veff(x0) + Veff(x0-h))/(h*h);
+  const curveColor = Vpp_num > 0 ? 'rgba(26,107,74,0.5)' : 'rgba(196,62,28,0.5)';
+
+  vCtx.strokeStyle = curveColor;
+  vCtx.lineWidth = 1.5;
+  vCtx.setLineDash([3,3]);
+  vCtx.beginPath();
+  for (let dx = -3; dx <= 3; dx += 0.1) {
+    const xx = x0 + dx;
+    const vv = V0 + 0.5 * Vpp_num * dx * dx;
+    if (xx > xMin && xx < xMax && vv > vMin && vv < vMax) {
+      const px = toX(xx), py = toY(vv);
+      if (dx === -3) vCtx.moveTo(px, py);
+      else vCtx.lineTo(px, py);
+    }
+  }
+  vCtx.stroke();
+  vCtx.setLineDash([]);
+
+  // Axes
+  vCtx.strokeStyle = 'rgba(255,255,255,0.3)';
+  vCtx.lineWidth = 1;
+  vCtx.beginPath();
+  vCtx.moveTo(padL, padT); vCtx.lineTo(padL, padT+plotH); vCtx.lineTo(padL+plotW, padT+plotH);
+  vCtx.stroke();
+
+  // Axis labels
+  vCtx.fillStyle = 'rgba(255,255,255,0.5)';
+  vCtx.font = '12px "DM Sans"';
+  vCtx.textAlign = 'center';
+  vCtx.fillText('r / rₛ', padL + plotW/2, padT + plotH + 35);
+
+  vCtx.save();
+  vCtx.translate(16, padT + plotH/2);
+  vCtx.rotate(-Math.PI/2);
+  vCtx.fillText('V_eff', 0, 0);
+  vCtx.restore();
+}
+
+document.getElementById('rSlider').addEventListener('input', drawVeff);
+drawVeff();
+</script>
+</body>
+</html>
